@@ -3,7 +3,7 @@ const app = express();
 require('dotenv').config();
 const { sequelize } = require('./src/models'); 
 const PORT = process.env.PORT;
-const productControler = require('./src/controler/ProductController')
+const productControler = require('./src/controller/ProductController')
 app.use(express.json());
 
 async function startApp() {
