@@ -1,10 +1,9 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
-
 const { sequelize } = require('./src/models'); 
 const PORT = process.env.PORT;
-
+const productControler = require('./src/controler/ProductControler')
 app.use(express.json());
 
 async function startApp() {
@@ -24,5 +23,6 @@ async function startApp() {
     console.log("Podpowiedź: Upewnij się, że kontener Docker z bazą działa.");
   }
 }
+app.post('/api/product',productControler.addProduct)
 
 startApp();
