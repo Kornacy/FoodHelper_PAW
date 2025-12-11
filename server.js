@@ -23,6 +23,6 @@ async function startApp() {
     console.log("Podpowiedź: Upewnij się, że kontener Docker z bazą działa.");
   }
 }
-app.post('/api/product',productControler.addProduct)
-
+app.post('/api/product',productControler.addProduct);
+app.put('/api/product/:productId',productControler.editProduct);
 startApp();

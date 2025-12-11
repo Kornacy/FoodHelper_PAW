@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const { Product } = require("../models");
 
 const addProduct = async (req,res) => {
@@ -10,4 +11,15 @@ const addProduct = async (req,res) => {
         res.status(500).json({error: err.message});
     }
 };
-module.exports = { addProduct };
+const editProduct = async (req,res) => {
+    try{
+        const {productId }= req.params;
+        const {name, unit, calories } = req.body;
+        const [updatedCount,updatedRows] = await Product.update({name: name,unit: unit,calories: calories}, {where: {id:productId}})
+        res.json(updatedCount);
+    }
+    catch (err){
+        res.status(500).json({error:err.message});
+    }
+}
+module.exports = { addProduct, editProduct};
