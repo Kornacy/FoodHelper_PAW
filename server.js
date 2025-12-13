@@ -1,11 +1,19 @@
 const express = require('express');
 const app = express();
+const session = require('express-session')
 require('dotenv').config();
 const { sequelize } = require('./src/models'); 
 const PORT = process.env.PORT;
-const productControler = require('./src/controller/ProductController')
+const productController = require('./src/controller/ProductController')
+const userController = require('./src/controller/UserController')
+const passport = require('passport');
 app.use(express.json());
-
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  store: sesionStore
+}))
+app.use(passport.initialize());
+app.use(passport.session())
 async function startApp() {
   try {
     console.log("⏳ Łączenie z bazą danych...");
@@ -23,6 +31,8 @@ async function startApp() {
     console.log("Podpowiedź: Upewnij się, że kontener Docker z bazą działa.");
   }
 }
-app.post('/api/product',productControler.addProduct);
-app.put('/api/product/:productId',productControler.editProduct);
+app.post('/user/login',userController.login)
+app.post('/api/product',productController.addProduct);
+app.put('/api/product/:productId',productController.editProduct);
+app.post('/user/register',userController.register);
 startApp();
