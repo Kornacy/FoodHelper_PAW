@@ -52,5 +52,7 @@ app.post('/api/product',isAuth,productController.addProduct);
 app.put('/api/product/:productId',productController.editProduct);
 app.post('/api/user/register',userController.register);
 app.post('/api/user/logout',userController.logout)
+app.get('/api/product/:productId',productController.getProductById)
+app.get('/api/products', productController.getDefaultProducts)
 
 startApp();

@@ -1,4 +1,4 @@
-const { where } = require("sequelize");
+const { where, Op } = require("sequelize");
 const { Product } = require("../models");
 
 const addProduct = async (req,res) => {
@@ -22,4 +22,26 @@ const editProduct = async (req,res) => {
         res.status(500).json({error:err.message});
     }
 }
-module.exports = { addProduct, editProduct};
+const getProductById = async (req,res) => {
+    try{
+        const {productId} = req.params;
+        const product = await Product.findByPk(productId);
+        if(!product){ 
+            return res.status(404).json({error: "Nie znaleziono produktu"})
+        }
+        res.json(product);
+    }
+    catch(err){
+        res.status(500).json({error: err.message});
+    }
+}
+const getDefaultProducts = async (req,res) => {
+    try{
+        const products = await Product.findAll({where: {id: {[Op.lte]: 100}}})
+        res.json(products);
+    }
+    catch(err){
+        res.status(500).json({error: err.message})
+    }
+}
+module.exports = { addProduct, editProduct, getProductById, getDefaultProducts};
