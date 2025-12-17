@@ -28,7 +28,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) =>{
     try{
         const user = User.findByPk(id, {
-            attributes: {exclude: ['passport_hash']}
+            attributes: {exclude: ['password_hash']}
         });
         done(null,user);
     }
