@@ -9,6 +9,7 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store)
 const { sequelize } = require('./src/models'); 
 const productController = require('./src/controller/ProductController')
 const userController = require('./src/controller/UserController')
+const fridgeController = require("./src/controller/FridgeController");
 const isAuth = require('./src/middleware/auth');
 
 const app = express();
@@ -27,22 +28,18 @@ app.use(session({
 }))
 sessionStore.sync();
 app.use(passport.initialize());
-app.use(passport.session())
+app.use(passport.session());
 //Start aplikacji
 async function startApp() {
   try {
-    console.log("⏳ Łączenie z bazą danych...");
-
+    console.log("Łączenie z bazą danych...");
     await sequelize.sync({ alter: true });
-    
-    console.log("✅ Sukces! Baza danych i tabele są gotowe.");
-
+    console.log("Sukces! Baza danych i tabele są gotowe.");
     app.listen(PORT, () => {
-      console.log(`🚀 Serwer działa na porcie ${PORT}`);
+      console.log(`Serwer działa na porcie ${PORT}`);
     });
-
   } catch (error) {
-    console.error("❌ Błąd startu aplikacji:", error.message);
+    console.error("Błąd startu aplikacji:", error.message);
     console.log("Podpowiedź: Upewnij się, że kontener Docker z bazą działa.");
   }
 }
@@ -54,5 +51,8 @@ app.post('/api/user/register',userController.register);
 app.post('/api/user/logout',userController.logout)
 app.get('/api/product/:productId',productController.getProductById)
 app.get('/api/products', productController.getDefaultProducts)
-
+app.post('/api/fridge/add/:prodId',isAuth,fridgeController.addProductToFridgeFromList)
+app.put('/api/fridge/update/:prodId',isAuth,fridgeController.updateProductQuantity)
+app.delete('/api/fridge/delete/:prodId',isAuth,fridgeController.deleteProduct)
+app.get('/api/fridge',isAuth,fridgeController.getAllProducts)
 startApp();
