@@ -10,6 +10,7 @@ const { sequelize } = require('./src/models');
 const productController = require('./src/controller/ProductController')
 const userController = require('./src/controller/UserController')
 const fridgeController = require("./src/controller/FridgeController");
+const recipeController = require('./src/controller/RecipeController');
 const isAuth = require('./src/middleware/auth');
 
 const app = express();
@@ -55,4 +56,15 @@ app.post('/api/fridge/add/:prodId',isAuth,fridgeController.addProductToFridgeFro
 app.put('/api/fridge/update/:prodId',isAuth,fridgeController.updateProductQuantity)
 app.delete('/api/fridge/delete/:prodId',isAuth,fridgeController.deleteProduct)
 app.get('/api/fridge',isAuth,fridgeController.getAllProducts)
+app.post('/api/recipe/add',isAuth,recipeController.addRecipe)
+app.get('/api/myrecipes',isAuth,recipeController.getMyRecipes)
+app.get('/api/recipes/',recipeController.getPublicRecipes)
+app.get('/api/recipe/:id',recipeController.getRecipeDetails)
+app.put('/api/recipe/:id',isAuth,recipeController.editRecipe)
+app.patch('/api/recipe/archive/:id',isAuth,recipeController.archiveRecipe)
+app.patch('/api/recipe/public/:id',isAuth,recipeController.publicRecipe)
+app.patch('/api/recipe/publish/:id',isAuth,recipeController.publishRecipe)
+app.patch('/api/recipe/draft/:id',isAuth,recipeController.draftRecipe)
+app.delete('/api/recipe/delete/:id',isAuth,recipeController.deleteRecipe)
+
 startApp();
