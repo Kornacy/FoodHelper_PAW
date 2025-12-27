@@ -11,6 +11,7 @@ const productController = require('./src/controller/ProductController')
 const userController = require('./src/controller/UserController')
 const fridgeController = require("./src/controller/FridgeController");
 const recipeController = require('./src/controller/RecipeController');
+const reviewController = require('./src/controller/ReviewController');
 const isAuth = require('./src/middleware/auth');
 
 const app = express();
@@ -66,5 +67,7 @@ app.patch('/api/recipe/public/:id',isAuth,recipeController.publicRecipe)
 app.patch('/api/recipe/publish/:id',isAuth,recipeController.publishRecipe)
 app.patch('/api/recipe/draft/:id',isAuth,recipeController.draftRecipe)
 app.delete('/api/recipe/delete/:id',isAuth,recipeController.deleteRecipe)
-
+app.post('/api/recipe/review/:id', isAuth, reviewController.addReview)
+app.get('/api/recipe/review/:id',reviewController.getReviewsForRecipe);
+app.get('/api/user/review/:id',isAuth,reviewController.getReviewsForUsersRecipe)
 startApp();
