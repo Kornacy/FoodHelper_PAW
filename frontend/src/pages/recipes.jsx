@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"; 
 import {getPublicRecipes} from '../services/recipeService';
-
+import { Link } from 'react-router-dom'
 const Home = () => {
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -34,7 +34,13 @@ const Home = () => {
                     {recipes.map((recipe) => (
                         <li key={recipe.id}>
                             <strong>{recipe.title}</strong>
-                            {/* Tu możesz dodać więcej pól, np. opis */}
+                            <div style={{ marginTop: '5px' }}>
+                                <Link to={`/recipes/${recipe.id}`}>
+                                    <button style={{ cursor: 'pointer' }}>
+                                        Zobacz szczegóły
+                                    </button>
+                                </Link>
+                            </div>
                         </li>
                     ))}
                 </ul>
