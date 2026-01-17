@@ -7,10 +7,10 @@ services:
     restart: always
     environment:
       POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD} 
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
-      - "${DB_PORT}:5432" 
+      - "${DB_PORT}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
@@ -21,10 +21,29 @@ services:
     container_name: pgadmin_paw
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_MAIL}    
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASS} 
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_MAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASS}
     ports:
       - "${PGADMIN_PORT}:80"
+    networks:
+      - dockerweb
+
+  backend:
+    build: .
+    container_name: API_FoodHelper
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    environment:
+      - DB_HOST=db
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=5432
+      - SESSION_SECRET=${SESSION_SECRET}
+    command: npm run dev
     networks:
       - dockerweb
 
