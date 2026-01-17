@@ -4,6 +4,7 @@ const session = require('express-session')
 const passport = require('passport');
 require('dotenv').config();
 const SequelizeStore = require('connect-session-sequelize')(session.Store)
+const cors = require('cors');
 
 //Importy
 const { sequelize } = require('./src/models'); 
@@ -17,6 +18,10 @@ const isAuth = require('./src/middleware/auth');
 const app = express();
 app.use(express.json());
 const PORT = process.env.PORT;
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 //Start sesji
 require("./src/config/passport")
 const sessionStore = new SequelizeStore({
