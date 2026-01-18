@@ -1,4 +1,4 @@
-const { UserFridge, Product } = require("../models")
+const { UserFridge, Product, User } = require("../models")
 
 const addProductToFridgeFromList = async (req,res) =>{ 
     //Ta funkcja działa tylko dla produktów które są już w bazie, planowane wykorzystanie razem z funkcją getDefaultProducts.
@@ -52,8 +52,8 @@ const deleteProduct = async (req,res) => {
         const loggedUser = await req.user
         const userId = loggedUser.id;
         const {prodId} = req.params;
-        const {quantity} = req.body;
-        console.log(`Zalogowany użytkownik o ID: ${userId} ProductId: ${prodId} Quantity: ${quantity}`);
+        //const {quantity} = req.body;
+        console.log(`Usuwanie produktu o ProductId: ${prodId} z lodówki użytkownika:  ${userId}`);
         const productExists = await Product.findByPk(prodId)
         if(!productExists){return res.status(404).json({error: "Nie ma takiego produktu"})}
         if(!userId){return res.status(404).json({error: "Użytkownik nie zalogowany"})} 
@@ -73,13 +73,31 @@ const getAllProducts = async (req,res) => {
     try{
         const loggedUser = await req.user
         const userId = loggedUser.id;
-        const products = await UserFridge.findAll(
-            {where: {userId:userId}}
-        );
-        if(!products) {return res.status(500); }
+        console.log(`Pobieranie danych lodówki użytkownika o id: ${userId}.`)
+        const userdata = await User.findByPk(userId, {
+            include: [{
+                model: Product,
+                attributes: ['id','name','calories','unit'],
+                through: {
+                    attributes: ['quantity']
+                }
+            }]
+        });
+        if(!userdata) {return res.status(500); }
+
+        const products = userdata.Products.map(product => ({
+            id: product.id,
+            name: product.name,
+            calories: product.calories,
+            unit: product.unit,
+            quantity: product.UserFridge.quantity
+        }));
+
+        console.log(`Pobrane dane: ${products}`)
         res.json(products);
     }
     catch(err){
+        console.log(err);
         res.status(500).json({error: "Błąd przy pobieraniu produktów z lodówki"})
     }
 }

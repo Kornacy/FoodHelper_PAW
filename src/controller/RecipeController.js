@@ -4,8 +4,8 @@ const { Recipe, RecipeIngredient, Product, sequelize } = require('../models');
 const addRecipe = async (req, res) => {
     const t = await sequelize.transaction();
     try {
-        const user = await req.user;
-        const userId = user.id
+        const userId = await req.user ? req.user.id : null;
+        //const userId = user.id
         console.log(`Zalogowany użytkownik o id: ${userId}`)
         const { title, description, instruction, ingredients } = req.body;
         const recipe = await Recipe.create({
@@ -66,8 +66,9 @@ const getPublicRecipes = async (req, res) => {
 }
 const getRecipeDetails = async (req, res) => {
     try {
-        const user = await req.user;
-        const userId = user.id
+        const userId = await req.user ? req.user.id : null;
+        // const user = await req.user;
+        // const userId = user.id
         const recipeId = req.params.id;
         const recipe = await Recipe.findOne({
             where: {
