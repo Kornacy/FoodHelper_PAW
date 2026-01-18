@@ -27,50 +27,60 @@ const Fridge = () => {
         fetchData();
     }, [fetchData]);
 
-    
 
-    // Obsługa dodawania (+1 w lodówce)
+    // Obsługa dodawania (z listy wszystkich produktów)
     const handleAdd = async (product) => {
         try {
             await addToFridge(product.id);
-            fetchData(); 
+            fetchData();
         } catch (error) {
-            alert(error,"Nie udało się dodać produktu.");
+            console.error(error);
+            alert("Nie udało się dodać produktu.");
         }
     };
 
     // Obsługa usuwania (całkowitego)
-    const handleDelete = async (itemId) => {
+    const handleDelete = async (prodId) => {
+        console.log(`Usuwany product z id ${prodId}`)
         if(!window.confirm("Czy na pewno usunąć ten produkt?")) return;
         try {
-            await removeFromFridge(itemId);
-            fetchData(); 
+            await removeFromFridge(prodId);
+            setFridgeItems(prev => prev.filter(item => item.id !== prodId));
+            
         } catch (error) {
-            console.error(error);
+            console.error("Błąd usuwania:", error);
+            alert("Nie udało się usunąć produktu");
         }
     };
 
     // Zmiana ilości (+/-)
     const handleUpdateQty = async (item, change) => {
-        const newQty = item.FridgeItem.quantity + change;
+        const currentQty = item.quantity; 
+        const newQty = currentQty + change;
+
         if (newQty <= 0) {
+
             handleDelete(item.id); 
             return;
         }
+
         try {
             await updateQuantity(item.id, newQty);
 
+
             setFridgeItems(prev => prev.map(p => 
                 p.id === item.id 
-                ? { ...p, FridgeItem: { ...p.FridgeItem, quantity: newQty } } 
+                ? { ...p, quantity: newQty } 
                 : p
             ));
         } catch (error) {
             console.error(error);
+            alert("Nie udało się zmienić ilości.");
         }
     };
 
     if (loading) return <div className="fridge-container">Ładowanie lodówki... 🧊</div>;
+    
     return (
         <div className="fridge-container">
             <Link to="/start">← Wróć do panelu</Link>
@@ -85,6 +95,7 @@ const Fridge = () => {
                         <p>Lodówka jest pusta. Dodaj coś z listy obok! 👉</p>
                     ) : (
                         fridgeItems.map(item => (
+                            
                             <div key={item.id} className="item-card">
                                 <div className="item-info">
                                     <h3>{item.name}</h3>
