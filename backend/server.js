@@ -1,9 +1,8 @@
 //Moduły
 const express = require('express');
-const session = require('express-session')
 const passport = require('passport');
 require('dotenv').config();
-const SequelizeStore = require('connect-session-sequelize')(session.Store)
+const cors = require('cors');
 
 //Importy
 const { sequelize } = require('./src/models'); 
@@ -17,20 +16,13 @@ const isAuth = require('./src/middleware/auth');
 const app = express();
 app.use(express.json());
 const PORT = process.env.PORT;
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 //Start sesji
 require("./src/config/passport")
-const sessionStore = new SequelizeStore({
-  db: sequelize,
-});
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  store: sessionStore,
-  resave: false,
-  saveUninitialized: false
-}))
-sessionStore.sync();
 app.use(passport.initialize());
-app.use(passport.session());
 //Start aplikacji
 async function startApp() {
   try {

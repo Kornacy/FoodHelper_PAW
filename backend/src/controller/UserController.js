@@ -1,6 +1,7 @@
 const { Model } = require("sequelize");
 const { User } = require("../models");
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 
 const register = async (req,res) => {
     try {
@@ -22,21 +23,22 @@ const register = async (req,res) => {
     }
 }
 const login = async (req,res,next) => {
-    passport.authenticate('local',(err, user, info) =>{
+    passport.authenticate('local',{session: false},(err, user, info) =>{
         if(err){
             return next(err);
         }
         if(!user){
             return res.status(401).json({error: info.message});
         }
-        req.logIn(user,(err) => {
-            if(err) {
-                return next(err);
-            }
-            return res.json({
-                message: "Zalogowano",
-                user: {id: user.id, email: user.email, role: user.role}
-            });
+        const token = jwt.sign(
+            {id:user.id, email: user.email},
+            process.env.JWT_SECRET,
+            {expiresIn: '24h'}
+        );
+        return res.json({
+            message: "Zalogowano",
+            token: token,
+            user: {id: user.id, username: user.username, email: user.email, role: user.role}
         });
     })
     (req, res, next);
@@ -44,8 +46,6 @@ const login = async (req,res,next) => {
 const logout = (req,res) => {
     req.logout((err) => {
         if(err) return res.status(500).json({ error: "Bąąd wylogowania"});
-        req.session.destroy();
-        res.clearCookie('connect-sid');
         res.json({message: "Wylogowano"});
     });
 };
