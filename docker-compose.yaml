@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   db:
     image: postgres:16-alpine
@@ -13,7 +15,6 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - dockerweb
-
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin_paw
@@ -27,20 +28,38 @@ services:
       - dockerweb
 
   backend:
-    build: .
+    build: 
+      context: ./backend 
+      dockerfile: Dockerfile
     container_name: API_FoodHelper
     ports:
-      - "3000:3000"
+      - "${PORT}:3000"
     volumes:
-      - ./:/app
+      - ./backend:/app
       - /app/node_modules
     environment:
       - DB_HOST=db
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
-      - DB_PORT=5432
+      - DB_PORT={DB_PORT}
       - SESSION_SECRET=${SESSION_SECRET}
+    command: npm run dev
+    depends_on:
+      - db
+    networks:
+      - dockerweb
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: Client_FoodHelper
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app      
+      - /app/node_modules   
     command: npm run dev
     networks:
       - dockerweb
