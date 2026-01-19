@@ -7,8 +7,8 @@ const Product = sequelize.define('Product',{
         allowNull: false
     },
     unit: {
-        type: DataTypes.ENUM('l','ml','mg','kg','pc.'),
-        defaultValue: 'pc.'
+        type: DataTypes.ENUM('l','ml','mg','kg','szt.'),
+        defaultValue: 'szt.'
     },
     calories: {
         type: DataTypes.FLOAT,

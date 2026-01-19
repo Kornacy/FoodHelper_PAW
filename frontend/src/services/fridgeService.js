@@ -12,9 +12,14 @@ export const getAllProducts = async () => {
     return response.data;
 };
 //POST
-//Dodaj produkt do lodówki
+//Dodaj produkt do lodówki z listy
 export const addToFridge = async (productId) => {
     const response = await api.post(`/api/fridge/add/${productId}`, { quantity: 1 });
+    return response.data;
+};
+//Dodaj nowy produkt do bazy
+export const createNewProduct = async (productData) => {
+    const response = await api.post('/api/product', productData); 
     return response.data;
 };
 //DELETE

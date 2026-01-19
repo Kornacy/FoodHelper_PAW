@@ -1,5 +1,6 @@
 const { Op, where } = require("sequelize");
 const { Recipe, RecipeIngredient, Product, sequelize } = require('../models');
+const jwt = require('jsonwebtoken');
 
 const addRecipe = async (req, res) => {
     const t = await sequelize.transaction();
@@ -66,9 +67,22 @@ const getPublicRecipes = async (req, res) => {
 }
 const getRecipeDetails = async (req, res) => {
     try {
-        const userId = await req.user ? req.user.id : null;
-        // const user = await req.user;
-        // const userId = user.id
+        let userId = null;
+        const authHeader = req.headers['authorization'];
+        if (authHeader) {
+            const token = authHeader.split(' ')[1]; 
+            if (token) {
+                try {
+
+                    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'TwojSekretnyKlucz');
+                    userId = decoded.id; 
+                    console.log(`Zalogowany user ID: ${userId}`);
+                } catch (err) {
+
+                    console.log("Token nieważny lub brak, traktuję jako gościa.");
+                }
+            }
+        }
         const recipeId = req.params.id;
         const recipe = await Recipe.findOne({
             where: {
@@ -80,7 +94,7 @@ const getRecipeDetails = async (req, res) => {
             },
             include: [{
                 model: Product,
-                attributes: ['id', 'name', 'calories'],
+                attributes: ['id', 'name', 'calories','unit'],
                 through: {
                     attributes: ['quantity']
                 }

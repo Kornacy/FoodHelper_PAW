@@ -1,11 +1,14 @@
 import { Routes, Route } from 'react-router-dom';
-import Recipes from './pages/Recipes';
+import Recipes from './pages/PublicRecipes';
 import MainPage from './pages/MainPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import RecipeDetails from './pages/RecipeDetails';
 import StartPage from './pages/StartPage';
 import Fridge from './pages/Fridge';
+import MyRecipes from './pages/MyRecipes';
+import AddRecipe from './pages/AddRecipe';
+import EditRecipe from './pages/EditRecipe';
 import './App.css';
 
 function App() {
@@ -19,6 +22,9 @@ function App() {
          <Route path="/recipes/:id" element={<RecipeDetails />}></Route>
          <Route path="/start" element={<StartPage />}></Route>
          <Route path="/fridge" element={<Fridge />}></Route>
+         <Route path='/my-recipes' element={<MyRecipes/>}></Route>
+         <Route path='/add-recipe' element={<AddRecipe/>}></Route>
+         <Route path="/edit-recipe/:id" element={<EditRecipe />}></Route>
        </Routes>
     </div>
   );

@@ -1,5 +1,5 @@
 const { Model } = require('sequelize');
-const { Review, Recipe } = require('../models')
+const { Review, Recipe, User } = require('../models')
 
 const addReview = async (req, res) => {
     try {
@@ -23,7 +23,7 @@ const getReviewsForRecipe = async (req, res) => {
         const recipe = await Recipe.findByPk(recipeId);
         if (!recipe) { return res.status(500).json({ error: "Nie znaleziono przepisu" }) }
         if (recipe.public == false && recipe.userId != user?.id) { return res.status(500).json({ error: "Nie można wyświetlić opini" }) };
-        const reviews = await Review.findAll({ where: { recipeId: recipeId } })
+        const reviews = await Review.findAll({ where: { recipeId: recipeId }, include: [{model: User, attributes: ['username']}], order: [['createdAt','DESC']] })
         res.json(reviews)
     } catch (error) {
         res.status(500).json({ error: error.message })

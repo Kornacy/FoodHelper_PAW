@@ -16,6 +16,11 @@ export const getRecipeDetails = async (id) => {
     const res = await api.get(`/api/recipe/${id}`);
     return res.data;
 };
+//pobieranie recenzji przepisu
+export const getRecipeReviews = async (recipeId) => {
+    const response = await api.get(`/api/recipe/review/${recipeId}`);
+    return response.data;
+};
 
 //POST
 //dodanie przepisu
@@ -23,7 +28,13 @@ export const addRecipe = async (data) => {
     const res = await api.post('/api/recipe/add', data);
     return res.data;
 };
+//dodawanie recenzji
+export const addRecipeReview = async (recipeId, reviewData) => {
+    const response = await api.post(`/api/recipe/review/${recipeId}`, reviewData);
+    return response.data;
+};
 
+//PUT
 // Edytuj istniejący przepis
 export const editRecipe = async (id, data) => {
     const res = await api.put(`/api/recipe/${id}`, data);
