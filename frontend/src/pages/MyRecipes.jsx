@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
-import { getMyRecipes, deleteRecipe, publicRecipe, draftRecipe} from '../services/recipeService';
-import './PublicRecipes.css'; 
+import { getMyRecipes, deleteRecipe, publicRecipe, draftRecipe } from '../services/recipeService';
+import './MyRecipes.css';
 
 const MyRecipes = () => {
     const [recipes, setRecipes] = useState([]);
@@ -28,12 +28,12 @@ const MyRecipes = () => {
         try {
             if (recipe.public) {
                 await draftRecipe(recipe.id);
-                setRecipes(prev => prev.map(r => 
+                setRecipes(prev => prev.map(r =>
                     r.id === recipe.id ? { ...r, public: false } : r
                 ));
             } else {
                 await publicRecipe(recipe.id);
-                setRecipes(prev => prev.map(r => 
+                setRecipes(prev => prev.map(r =>
                     r.id === recipe.id ? { ...r, public: true } : r
                 ));
             }
@@ -45,7 +45,7 @@ const MyRecipes = () => {
 
     const handleDelete = async (id) => {
         if (!window.confirm("Czy na pewno chcesz usunąć ten przepis?")) return;
-        
+
         try {
             await deleteRecipe(id);
             setRecipes(prev => prev.filter(r => r.id !== id));
@@ -60,34 +60,24 @@ const MyRecipes = () => {
 
     return (
         <div className="home-container">
-            <Link to="/start">← Wróć do panelu</Link>
-            
-            <div style={{
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center',
-                marginBottom: '30px',
-                borderBottom: '1px solid #eee',
-                paddingBottom: '20px'
-            }}>
-                <h1 className="page-title" style={{marginBottom: 0}}>Moje Przepisy 👨‍🍳</h1>
-                
-                <Link to="/add-recipe">
-                    <button className="action-btn btn-public" style={{
-                        width: 'auto', 
-                        padding: '12px 25px', 
-                        fontSize: '1rem',
-                        backgroundColor: '#2ecc71'
-                    }}>
-                        + Dodaj Przepis
-                    </button>
+            {/* 1. Link wyciągnięty przed nagłówek */}
+            <Link to="/start" className="back-link-top">
+                ← Wróć do panelu
+            </Link>
+
+            {/* 2. Nagłówek zawiera tylko Tytuł i Przycisk */}
+            <header className="page-header-row">
+                <h1 className="page-title">Moje Przepisy</h1>
+
+                <Link to="/add-recipe" className="add-recipe-btn">
+                    Dodaj Przepis
                 </Link>
-            </div>
-            
+            </header>
+
             {recipes.length === 0 ? (
-                <div style={{textAlign: 'center', marginTop: '50px'}}>
+                <div className="empty-state">
                     <p>Nie masz jeszcze żadnych przepisów.</p>
-                    <Link to="/add-recipe" style={{color: '#3498db', fontWeight: 'bold'}}>
+                    <Link to="/add-recipe" className="empty-link">
                         Kliknij tutaj, aby dodać pierwszy!
                     </Link>
                 </div>
@@ -95,10 +85,12 @@ const MyRecipes = () => {
                 <div className="recipes-grid">
                     {recipes.map((recipe) => (
                         <div key={recipe.id} className="recipe-card">
-                            
-                            <span className={`status-badge ${recipe.public ? 'status-public' : 'status-private'}`}>
-                                {recipe.public ? 'PUBLICZNY' : 'SZKIC'}
-                            </span>
+
+                            <div className="card-top">
+                                <span className={`status-badge ${recipe.public ? 'status-public' : 'status-private'}`}>
+                                    {recipe.public ? 'Publiczny' : 'Szkic'}
+                                </span>
+                            </div>
 
                             <div className="recipe-info">
                                 <h3>{recipe.title}</h3>
@@ -107,34 +99,36 @@ const MyRecipes = () => {
                                 </p>
                             </div>
 
-                            <div className="my-recipes-actions">
-                                <Link to={`/recipes/${recipe.id}`}>
+                            <div className="card-actions">
+                                <Link to={`/recipes/${recipe.id}`} className="details-link-full">
                                     <button className="action-btn btn-details">
-                                        👁️ Zobacz szczegóły
+                                        Zobacz szczegóły
                                     </button>
                                 </Link>
 
-                                <Link to={`/edit-recipe/${recipe.id}`}>
-                                    <button className="action-btn btn-edit">
-                                        ✏️ Edytuj
+                                <div className="admin-actions">
+                                    <Link to={`/edit-recipe/${recipe.id}`} className="action-link">
+                                        <button className="action-btn btn-edit">
+                                            Edytuj
+                                        </button>
+                                    </Link>
+
+                                    <button
+                                        className={`action-btn ${recipe.public ? 'btn-private' : 'btn-public'}`}
+                                        onClick={() => handleTogglePublic(recipe)}
+                                    >
+                                        {recipe.public ? 'Ukryj' : 'Upublicznij'}
                                     </button>
-                                </Link>
 
-                                <button 
-                                    className={`action-btn ${recipe.public ? 'btn-private' : 'btn-public'}`}
-                                    onClick={() => handleTogglePublic(recipe)}
-                                >
-                                    {recipe.public ? '🔒 Ukryj (Szkic)' : '🌍 Upublicznij'}
-                                </button>
-
-                                <button 
-                                    className="action-btn btn-delete"
-                                    onClick={() => handleDelete(recipe.id)}
-                                >
-                                    🗑️ Usuń
-                                </button>
+                                    <button
+                                        className="action-btn btn-delete"
+                                        onClick={() => handleDelete(recipe.id)}
+                                    >
+                                        Usuń
+                                    </button>
+                                </div>
                             </div>
-                            
+
                         </div>
                     ))}
                 </div>

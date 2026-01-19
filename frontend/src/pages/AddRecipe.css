@@ -1,99 +1,250 @@
+:root {
+    --primary-green: #10b981;
+    --primary-hover: #059669;
+    --primary-blue: #3b82f6;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --bg-color: #f8f9fa;
+    --card-bg: #ffffff;
+    --border-color: #e5e7eb;
+    --input-bg: #f9fafb;
+    --danger-color: #ef4444;
+}
+
+.add-recipe-wrapper {
+    background-color: var(--bg-color);
+    min-height: 100vh;
+    padding: 3rem 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+}
+
 .add-recipe-container {
     max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    width: 100%;
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    padding: 2.5rem;
+}
+
+.form-header {
+    margin-bottom: 2.5rem;
+    position: relative;
+    text-align: center;
+}
+
+.back-link {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.5rem 0;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: var(--primary-green);
+}
+
+.form-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.form-section {
+    margin-bottom: 2rem;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
 }
 
-.form-group label {
+.form-label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-main);
 }
 
 .form-control {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 12px 16px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     font-size: 1rem;
-    box-sizing: border-box; /* Ważne przy paddingach */
+    color: var(--text-main);
+    outline: none;
+    transition: all 0.2s;
 }
 
-textarea.form-control {
+.form-control:focus {
+    background-color: white;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.description-area {
+    min-height: 80px;
     resize: vertical;
-    min-height: 100px;
 }
 
-/* Sekcja dodawania składników */
-.ingredient-adder {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-    align-items: flex-end;
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 6px;
-    border: 1px solid #eee;
+.instruction-area {
+    min-height: 200px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+/* Ingredients Section */
+.ingredients-section {
+    background-color: #fcfcfc;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px dashed var(--border-color);
+}
+
+.ingredient-adder-box {
+    margin-bottom: 1.5rem;
+}
+
+.ingredient-inputs {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.btn-add-ing {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    height: 45px; 
+}
+
+.btn-add-ing:hover {
+    background-color: #2563eb;
+}
+
+.helper-text {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
 }
 
 .ingredient-list {
     list-style: none;
     padding: 0;
-    margin-top: 10px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .ingredient-item {
+    background: white;
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 8px 12px;
-    background: #fff;
-    border: 1px solid #eee;
-    margin-bottom: 5px;
-    border-radius: 4px;
+    justify-content: space-between;
+}
+
+.ing-name {
+    flex-grow: 1;
+    color: var(--text-main);
+}
+
+.ing-qty {
+    color: var(--text-muted);
+    margin-right: 1.5rem;
+    font-weight: 500;
 }
 
 .btn-remove {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 4px;
-    cursor: pointer;
+    background-color: transparent;
+    color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+    padding: 4px 10px;
+    border-radius: 6px;
     font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-remove:hover {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.empty-ingredients {
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 1rem;
+}
+
+.form-actions {
+    margin-top: 3rem;
 }
 
 .submit-btn {
     width: 100%;
-    padding: 12px;
-    background-color: #2ecc71;
+    background-color: var(--primary-green);
     color: white;
     border: none;
-    border-radius: 6px;
+    padding: 1rem;
+    border-radius: 10px;
     font-size: 1.1rem;
-    font-weight: bold;
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
 }
 
 .submit-btn:hover {
-    background-color: #27ae60;
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.3);
 }
 
-.btn-add-ing {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    height: 42px; /* Żeby pasował do inputów */
+@media (max-width: 640px) {
+    .add-recipe-container {
+        padding: 1.5rem;
+    }
+    
+    .back-link {
+        position: static;
+        display: inline-block;
+        margin-bottom: 0.5rem;
+        transform: none;
+    }
+
+    .form-header {
+        margin-bottom: 2rem;
+    }
+
+    .ingredient-inputs {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-add-ing {
+        width: 100%;
+    }
 }

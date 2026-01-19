@@ -22,18 +22,4 @@ passport.use(new LocalStrat(
         catch(err) {return done(err);}
     }
 ));
-// passport.serializeUser((user, done) => {
-//     done(null, user.id);
-// })
-// passport.deserializeUser(async (id, done) =>{
-//     try{
-//         const user = User.findByPk(id, {
-//             attributes: {exclude: ['password_hash']}
-//         });
-//         done(null,user);
-//     }
-//     catch(err){
-//         done(err);
-//     }
-// });
 module.exports = passport;

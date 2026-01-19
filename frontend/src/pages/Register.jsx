@@ -38,9 +38,9 @@ const Register = () => {
                 email: formData.email,
                 password: formData.password
             });
-            
+
             alert("Konto założone! Możesz się zalogować.");
-            navigate('/login'); 
+            navigate('/login');
         } catch (err) {
             setError(err.response?.data?.message || "Błąd rejestracji");
         }
@@ -53,57 +53,63 @@ const Register = () => {
 
                 {error && <div className="error-msg">{error}</div>}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="auth-form">
                     <div className="form-group">
                         <label>Nazwa użytkownika</label>
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             name="username"
                             className="form-input"
                             value={formData.username}
                             onChange={handleChange}
-                            required 
+                            required
+                            placeholder="np. JanKowalski"
                         />
                     </div>
                     <div className="form-group">
                         <label>Email</label>
-                        <input 
-                            type="email" 
+                        <input
+                            type="email"
                             name="email"
                             className="form-input"
                             value={formData.email}
                             onChange={handleChange}
-                            required 
+                            required
+                            placeholder="np. jan@example.com"
                         />
                     </div>
                     <div className="form-group">
                         <label>Hasło</label>
-                        <input 
-                            type="password" 
+                        <input
+                            type="password"
                             name="password"
                             className="form-input"
                             value={formData.password}
                             onChange={handleChange}
-                            required 
+                            required
+                            placeholder="Minimum 8 znaków"
                         />
                     </div>
                     <div className="form-group">
                         <label>Potwierdź hasło</label>
-                        <input 
-                            type="password" 
+                        <input
+                            type="password"
                             name="confirmPassword"
                             className="form-input"
                             value={formData.confirmPassword}
                             onChange={handleChange}
-                            required 
+                            required
+                            placeholder="Powtórz hasło"
                         />
                     </div>
                     <button type="submit" className="auth-btn">Zarejestruj się</button>
                 </form>
 
-                <p className="auth-link">
-                    Masz już konto? <Link to="/login">Zaloguj się</Link>
-                </p>
+                <div className="auth-footer">
+                    <p className="auth-link">
+                        Masz już konto? <Link to="/login">Zaloguj się</Link>
+                    </p>
+                </div>
             </div>
         </div>
     );

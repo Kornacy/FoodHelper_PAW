@@ -3,11 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../services/authService';
 import './Login.css';
 
-const Login = () => {
+const Login = ({ setUser }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -15,16 +15,15 @@ const Login = () => {
 
         try {
             const response = await login({ email, password });
-            localStorage.setItem('token', response.token); 
+            localStorage.setItem('token', response.token);
             localStorage.setItem('user', JSON.stringify(response.user));
-            console.log(`response.user: ${response.user} response.token: ${response.token}`)
-            console.log(`response: ${response}`)
-            console.log(response)
-            alert("Zalogowano pomyślnie!"); 
-            navigate('/start'); 
+            setUser(response.user);
+            console.log(response.user);
+            alert("Zalogowano pomyślnie!");
+            navigate('/start');
         } catch (err) {
-
-            setError(err.response?.data?.message || "Błąd logowania");
+            console.error(err);
+            setError(err.response?.data?.error || "Błąd logowania");
         }
     };
 
@@ -32,36 +31,40 @@ const Login = () => {
         <div className="auth-container">
             <div className="auth-form-box">
                 <h2 className="auth-title">Zaloguj się</h2>
-                
+
                 {error && <div className="error-msg">{error}</div>}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="auth-form">
                     <div className="form-group">
                         <label>Email</label>
-                        <input 
-                            type="email" 
+                        <input
+                            type="email"
                             className="form-input"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            required 
+                            required
+                            placeholder="np. jan@example.com"
                         />
                     </div>
                     <div className="form-group">
                         <label>Hasło</label>
-                        <input 
-                            type="password" 
+                        <input
+                            type="password"
                             className="form-input"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            required 
+                            required
+                            placeholder="••••••••"
                         />
                     </div>
                     <button type="submit" className="auth-btn">Zaloguj się</button>
                 </form>
 
-                <p className="auth-link">
-                    Nie masz konta? <Link to="/register">Zarejestruj się</Link>
-                </p>
+                <div className="auth-footer">
+                    <p className="auth-link">
+                        Nie masz konta? <Link to="/register">Zarejestruj się</Link>
+                    </p>
+                </div>
             </div>
         </div>
     );

@@ -149,39 +149,57 @@ const EditRecipe = () => {
     if (loading) return <div className="add-recipe-container">Ładowanie danych edycji...</div>;
 
     return (
-        <div className="add-recipe-container">
-            <Link to="/my-recipes" style={{ display: 'block', marginBottom: '20px' }}>← Anuluj edycję</Link>
-            <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Edytuj Przepis ✏️</h1>
-            
-            <form onSubmit={handleSubmit}>
+        <div className="add-recipe-wrapper">
+    <div className="add-recipe-container">
+        <div className="form-header">
+            <Link to="/my-recipes" className="back-link">
+                Anuluj edycję
+            </Link>
+            <h1 className="form-title">Edytuj Przepis</h1>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="recipe-form">
+            <div className="form-section">
                 <div className="form-group">
-                    <label>Tytuł przepisu*</label>
-                    <input type="text" name="title" className="form-control" value={formData.title} onChange={handleChange} required />
+                    <label className="form-label">Tytuł przepisu</label>
+                    <input 
+                        type="text" 
+                        name="title" 
+                        className="form-control" 
+                        value={formData.title} 
+                        onChange={handleChange} 
+                        required 
+                    />
                 </div>
 
                 <div className="form-group">
-                    <label>Krótki opis</label>
-                    <textarea name="description" className="form-control" style={{minHeight: '60px'}} value={formData.description} onChange={handleChange} />
+                    <label className="form-label">Krótki opis</label>
+                    <textarea 
+                        name="description" 
+                        className="form-control description-area" 
+                        value={formData.description} 
+                        onChange={handleChange} 
+                    />
                 </div>
+            </div>
 
-
-                <div className="form-group">
-                    <label>Składniki</label>
-                    
-                    <div className="ingredient-adder" style={{background: '#fff3cd', border: '1px solid #ffeeba'}}>
-                        <div style={{flex: 2}}>
+            <div className="form-section ingredients-section">
+                <label className="form-label">Składniki</label>
+                <div className="ingredient-adder-box">
+                    <div className="ingredient-inputs">
+                        <div className="select-wrapper">
                             <select 
                                 className="form-control" 
                                 value={currentIngredient.productId} 
                                 onChange={e => setCurrentIngredient({...currentIngredient, productId: e.target.value})}
                             >
-                                <option value="">-- Wybierz produkt --</option>
+                                <option value="">Wybierz produkt</option>
                                 {allProducts.map(p => (
                                     <option key={p.id} value={p.id}>{p.name} ({p.unit || 'szt'})</option>
                                 ))}
                             </select>
                         </div>
-                        <div style={{flex: 1}}>
+                        <div className="quantity-wrapper">
                             <input 
                                 type="number" 
                                 className="form-control" 
@@ -190,48 +208,76 @@ const EditRecipe = () => {
                                 onChange={e => setCurrentIngredient({...currentIngredient, quantity: e.target.value})} 
                             />
                         </div>
-                        
                         <button 
                             type="button" 
                             className="btn-add-ing" 
                             onClick={handleAddIngredient}
-                            style={{fontWeight: 'bold', fontSize: '1.2rem', backgroundColor: '#ffc107', color: '#000'}}
                         >
-                            +
+                            Dodaj
                         </button>
                     </div>
                     
-                    <small style={{color: '#666', display: 'block', marginTop: '5px', marginBottom: '10px'}}>
-                        ℹ️ Aby zmienić ilość, usuń składnik i dodaj go ponownie z nową wartością.
-                    </small>
+                    <p className="helper-text">
+                        Aby zmienić ilość, usuń składnik z listy poniżej i dodaj go ponownie z nową wartością.
+                    </p>
+                </div>
 
+                <div className="ingredients-list-wrapper">
                     {addedIngredients.length > 0 ? (
                         <ul className="ingredient-list">
                             {addedIngredients.map((ing, index) => (
                                 <li key={index} className="ingredient-item">
-                                    <span><strong>{ing.name}</strong>: {ing.quantity} {ing.unit}</span>
-                                    <button type="button" className="btn-remove" onClick={() => handleRemoveIngredient(index)}>Usuń</button>
+                                    <span className="ing-name">
+                                        <strong>{ing.name}</strong>
+                                    </span>
+                                    <span className="ing-qty">
+                                        {ing.quantity} {ing.unit}
+                                    </span>
+                                    <button type="button" className="btn-remove" onClick={() => handleRemoveIngredient(index)}>
+                                        Usuń
+                                    </button>
                                 </li>
                             ))}
                         </ul>
                     ) : (
-                        <p style={{fontStyle: 'italic', color: '#999'}}>Brak składników w przepisie.</p>
+                        <div className="empty-ingredients">
+                            Brak składników w przepisie.
+                        </div>
                     )}
                 </div>
+            </div>
 
+            <div className="form-section">
                 <div className="form-group">
-                    <label>Instrukcja przygotowania*</label>
-                    <textarea name="instruction" className="form-control" style={{minHeight: '150px'}} value={formData.instruction} onChange={handleChange} required />
+                    <label className="form-label">Instrukcja przygotowania</label>
+                    <textarea 
+                        name="instruction" 
+                        className="form-control instruction-area" 
+                        value={formData.instruction} 
+                        onChange={handleChange} 
+                        required 
+                    />
                 </div>
 
-                <div className="form-group" style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                    <input type="checkbox" id="publicCheck" name="public" checked={formData.public} onChange={handleChange} style={{width: '20px', height: '20px'}} />
-                    <label htmlFor="publicCheck" style={{marginBottom: 0, cursor: 'pointer'}}>Upublicznij ten przepis</label>
+                <div className="form-group checkbox-group">
+                    <label className="checkbox-label">
+                        <input 
+                            type="checkbox" 
+                            name="public" 
+                            checked={formData.public} 
+                            onChange={handleChange} 
+                        />
+                        <span className="checkbox-text">Upublicznij ten przepis</span>
+                    </label>
                 </div>
+            </div>
 
-                <button type="submit" className="submit-btn" style={{backgroundColor: '#e67e22'}}>Zapisz Zmiany</button>
-            </form>
-        </div>
+            <div className="form-actions">
+                <button type="submit" className="submit-btn">Zapisz Zmiany</button>
+            </div>
+        </form>
+    </div>
+</div>
     );
 };
 

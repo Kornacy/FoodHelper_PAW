@@ -43,10 +43,7 @@ const login = async (req,res,next) => {
     })
     (req, res, next);
 }
-const logout = (req,res) => {
-    req.logout((err) => {
-        if(err) return res.status(500).json({ error: "Bąąd wylogowania"});
-        res.json({message: "Wylogowano"});
-    });
+const getMe = (req, res) => {
+    res.json({ user: req.user });
 };
-module.exports = {register, login, logout};
+module.exports = {register, login, getMe};

@@ -27,39 +27,43 @@ const Home = () => {
     if (error) return <div className="home-container"><p style={{ color: 'red' }}>{error}</p></div>;
 
     return (
-        <div className="home-container">
-            <Link to="/start">← Wróć do panelu</Link>
-            <h1 className="page-title">Odkrywaj Przepisy</h1>
-            
-            {recipes.length === 0 ? (
-                <div style={{textAlign: 'center', marginTop: '50px'}}>
-                    <p>Brak publicznych przepisów w bazie.</p>
-                </div>
-            ) : (
-                <div className="recipes-grid">
-                    {recipes.map((recipe) => (
-                        <div key={recipe.id} className="recipe-card">
-                            
-                            <div className="recipe-info">
-                                <h3>{recipe.title}</h3>
-                                <p className="recipe-desc">
-                                    {recipe.description || "Kliknij szczegóły, aby zobaczyć składniki i sposób przygotowania tego pysznego dania."}
-                                </p>
-                            </div>
-
-                            <div className="recipe-actions">
-                                <Link to={`/recipes/${recipe.id}`}>
-                                    <button className="details-btn">
-                                        Zobacz szczegóły ➜
-                                    </button>
-                                </Link>
-                            </div>
-                            
-                        </div>
-                    ))}
-                </div>
-            )}
+       <div className="home-container">
+    <header className="page-header">
+        <Link to="/start" className="back-link">
+            Wróć do panelu
+        </Link>
+        <h1 className="page-title">Odkrywaj Przepisy</h1>
+    </header>
+    
+    {recipes.length === 0 ? (
+        <div className="empty-state">
+            <p>Brak publicznych przepisów w bazie.</p>
         </div>
+    ) : (
+        <div className="recipes-grid">
+            {recipes.map((recipe) => (
+                <div key={recipe.id} className="recipe-card">
+                    
+                    <div className="recipe-info">
+                        <h3>{recipe.title}</h3>
+                        <p className="recipe-desc">
+                            {recipe.description || "Kliknij szczegóły, aby zobaczyć składniki i sposób przygotowania tego pysznego dania."}
+                        </p>
+                    </div>
+
+                    <div className="recipe-actions">
+                        <Link to={`/recipes/${recipe.id}`} className="details-link">
+                            <button className="details-btn">
+                                Zobacz szczegóły
+                            </button>
+                        </Link>
+                    </div>
+                    
+                </div>
+            ))}
+        </div>
+    )}
+</div>
     );
 }
 
