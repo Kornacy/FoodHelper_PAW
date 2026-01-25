@@ -49,7 +49,6 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
       - DB_PORT=${DB_PORT}
-      - SESSION_SECRET=${SESSION_SECRET}
     command: npm run dev
     depends_on:
       db:
