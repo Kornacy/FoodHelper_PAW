@@ -20,9 +20,8 @@ app.use(cors({
   origin: true,
   credentials: true
 }));
-//Start sesji
+
 require("./src/config/passport")
-// app.use(passport.initialize());
 //Start aplikacji
 async function startApp() {
   try {
@@ -40,7 +39,7 @@ async function startApp() {
 //Endpointy API
 app.post('/api/user/login',userController.login)
 app.post('/api/product',isAuth,productController.addProduct);
-app.put('/api/product/:productId',productController.editProduct);
+app.put('/api/product/:productId',isAuth,productController.editProduct);
 app.post('/api/user/register',userController.register);
 app.get('/api/product/:productId',productController.getProductById)
 app.get('/api/products', productController.getDefaultProducts)
@@ -60,6 +59,6 @@ app.patch('/api/recipe/draft/:id',isAuth,recipeController.draftRecipe)
 app.delete('/api/recipe/delete/:id',isAuth,recipeController.deleteRecipe)
 app.post('/api/recipe/review/:id', isAuth, reviewController.addReview)
 app.get('/api/recipe/review/:id',isAuth,reviewController.getReviewsForRecipe);
-app.get('/api/user/review/:id',isAuth,reviewController.getReviewsForUsersRecipe)
+app.get('/api/user/review/',isAuth,reviewController.getReviewsForUsersRecipe)
 app.get('/api/me',isAuth,userController.getMe);
 startApp();

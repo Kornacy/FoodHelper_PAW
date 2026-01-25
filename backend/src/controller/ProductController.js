@@ -37,7 +37,7 @@ const getProductById = async (req,res) => {
 }
 const getDefaultProducts = async (req,res) => {
     try{
-        const products = await Product.findAll({where: {id: {[Op.lte]: 100}}})
+        const products = await Product.findAll() //{where: {id: {[Op.lte]: 100}}}
         res.json(products);
     }
     catch(err){
